@@ -1,0 +1,21 @@
+{
+  "name": "bullmqpractice",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun --watch run index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.0",
+    "@types/ws": "^8.5.13"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "bullmq": "^5.34.5",
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}
