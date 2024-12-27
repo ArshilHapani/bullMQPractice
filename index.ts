@@ -8,13 +8,9 @@ const app = express();
 app.use(express.json());
 
 app.get("/", async (req, res) => {
-  console.log("processing request...");
   const messages = await myQueue.getWaiting();
   const completedJobs = await myQueue.getCompletedCount();
-
   res.json({
-    message: "Arshil is legend",
-    listeners: app.getMaxListeners(),
     messages: messages.map((item) => item.data),
     completedJobs,
   });
@@ -25,22 +21,26 @@ const server = app.listen(3000, () => {
 });
 
 app.post("/", async (req, res) => {
-  const name = req.body?.name as string;
-  if (!name) {
-    res.status(401);
-    res.json({
-      message: "Please provide name",
-    });
+  const { message } = req.body;
+  if (!message) {
+    res.status(400).json({ message: "Message is required" });
     return;
   }
-  await myQueue.add("users", name, {
-    removeOnComplete: 10, // for practice ideal can be 1000+
-    removeOnFail: 50, // for practice ideal can be > removeOnComplete (5000)
-  });
+  await myQueue.add(
+    "myJob",
+    { message },
+    {
+      removeOnComplete: 10 /*|| true*/, // for practice ideal can be 1000+
+      removeOnFail: 50, // for practice ideal can be > removeOnComplete (5000)
+    }
+  );
   res.json({
-    message: "name added!",
+    message: "Message added to the queue",
   });
 });
+
+// ignore this part if you are not interested in websocket
+
 // websocket
 
 const wss = new WebSocket.Server({ server });
